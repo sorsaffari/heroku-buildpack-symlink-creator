@@ -11,7 +11,7 @@ originals=$(find $BUILD_DIR/docs/ -name '*.yml') ## paths of the original .yml f
 for original in $originals; do
     original=${original/$BUILD_DIR/$RUNTIME_DIR} # original .yml file path
     symlink=${original#"$RUNTIME_DIR/docs/"} # remove prefix
-    symlink=${symlink:4} # remove page number
+    symlink=${symlink:3} # remove page number
     symlink="${symlink//-/_}" # repalce - with _
     symlink="${symlink/references\//}" # remove /references
     symlink="$BUILD_DIR/_data/$symlink" # .yml symlink path
