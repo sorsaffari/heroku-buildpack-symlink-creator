@@ -8,6 +8,8 @@ RUNTIME_DIR="/app"
 
 originals=$(find $BUILD_DIR/docs/ -name '*.yml') ## paths of the original .yml files
 
+ls $BUILD_DIR/docs/
+
 for original in $originals; do
     original=${original/$BUILD_DIR/$RUNTIME_DIR} # original .yml file path
     symlink=${original#"$RUNTIME_DIR/docs/"} # remove prefix
