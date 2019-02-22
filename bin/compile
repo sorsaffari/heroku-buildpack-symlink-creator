@@ -2,10 +2,15 @@
 
 set -xe
 
-absolute_path_prefix=$(pwd)
+REALPATH="$(dirname "$0")/realpath"
+BUILD_DIR="$("$REALPATH" "$1")" ## the temporary build path
+RUNTIME_DIR="/app"
 
-for original in $(find docs -name '*.yml'); do
-    symlink=${original#"docs/"} # remove prefix
+originals=$(find $BUILD_DIR/docs/ -name '*.yml') ## paths of the original .yml files
+
+for original in $originals; do
+    original=${original/$BUILD_DIR/$RUNTIME_DIR} # original .yml file path
+    symlink=${original#"$RUNTIME_DIR/docs/"} # remove prefix
     digits=${symlink:0:2}
     re='^[0-9]+$'
     if [[ $digits =~ $re ]] ; then
@@ -14,10 +19,10 @@ for original in $(find docs -name '*.yml'); do
     symlink="${symlink//-/_}" # repalce - with _
     symlink="${symlink/references\//}" # remove /references
 
-    absolute_symlink="$absolute_path_prefix/_data/$symlink" # .yml symlink path
-    absolute_original="$absolute_path_prefix/$original" # original .yml file path
+    symlink="$BUILD_DIR/_data/$symlink" # .yml symlink path
 
-    mkdir -p "$(dirname $absolute_symlink)" # create the symlink's path if non-existent (-p)
 
-    ln -s $absolute_original $absolute_symlink
-done
+    mkdir -p "$(dirname $symlink)" # create the symlink's path if non-existent (-p)
+
+    ln -s $original $symlink # create the symlink
+done 
