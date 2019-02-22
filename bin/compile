@@ -19,11 +19,11 @@ for original in $originals; do
     fi
     symlink="${symlink//-/_}" # repalce - with _
     symlink="${symlink/references\//}" # remove /references
-
-    symlink="$BUILD_DIR/_data/$symlink" # .yml symlink path
-
+    
     IFS='/' read -r -a splited_symlink <<< "$symlink" # split symlink into array by "/" as delimeter
     dir=${splited_symlink[0]} # get the directory to check against whitelist_dirs
+
+    symlink="$BUILD_DIR/_data/$symlink" # .yml symlink path
 
     if [[ " ${whitelist_dirs[@]} " =~ " ${dir} " ]]; then # allowed to create symlink
         mkdir -p "$(dirname $symlink)" # create the symlink's path if non-existent (-p)
